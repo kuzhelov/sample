@@ -4,10 +4,16 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.6'
 
-# Use sqlite as general database for Active Record
+
 group :development, :test do
+	# Use sqlite as general database for Active Record
 	gem 'sqlite3'
+
+	gem 'rspec-rails'
 end
+
+# In order to support behavioral integration tests 
+gem "capybara", group: :test
 
 # Use postgresql as the database for Active Record on production
 gem 'pg', group: :production
