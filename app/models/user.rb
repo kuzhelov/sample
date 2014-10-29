@@ -10,6 +10,12 @@
 #
 
 class User < ActiveRecord::Base
-	validates :name, presence: true
-	validates :email, presence: true
+	
+	class << self
+		def maxNameLength() 50 end
+	end
+
+	validates :name, presence: true, length: { maximum: self.maxNameLength }
+	validates :email, presence: true, format: { with: /\A[+\w\-]+@[a-z0-9\-]+[.][a-z]+\z/i }
+
 end
