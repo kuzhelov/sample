@@ -4,6 +4,8 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.6'
 
+# Active records annotations
+gem 'annotate', group: :development 
 
 group :development, :test do
 	# Use sqlite as general database for Active Record
@@ -15,10 +17,13 @@ end
 # In order to support behavioral integration tests 
 gem "capybara", group: :test
 
-# Use postgresql as the database for Active Record on production
-gem 'pg', group: :production
+group :production do
+	# Use postgresql as the database for Active Record on production
+	gem 'pg'
 
-gem 'rails_12factor'
+	gem 'rails_12factor'
+end
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets
