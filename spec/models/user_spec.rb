@@ -9,6 +9,10 @@
 #  updated_at      :datetime
 #  password_digest :string(255)
 #
+# Indexes
+#
+#  index_users_on_email  (email) UNIQUE
+#
 
 require 'spec_helper'
 
@@ -28,7 +32,10 @@ describe User do
 
 	subject { @user }
 
-	before { @user = create_user set_password_fields: true }
+	before do 
+		@user = create_user set_password_fields: true
+		User.delete_all
+	end
 
 	it { should respond_to :name }
 	it { should respond_to :email }
@@ -61,7 +68,40 @@ describe User do
 		it { should_not be_valid }
 	end
 
-	describe "its secure password methods" do
+	describe 'email is stored in lowercase' do
+		before do 
+			@user = create_user set_password_fields: true
+			@user.email.upcase!
+			@user.save
+
+			@user.reload
+		end
+
+		subject { @user.email }
+
+		it { should == @user.email.downcase }
+	end
+
+	describe 'when email is not unique (case insensitive)' do
+		before do 
+			@user = create_user set_password_fields: true 
+			@user.save
+
+			@user_with_same_email = @user.dup
+			@user_with_same_email.email.upcase!
+		end
+
+		subject { @user_with_same_email }
+
+		it { should_not be_valid }
+
+		describe 'save attempt' do
+			subject { @user_with_same_email.save }
+			it { should be_falsey }
+		end
+	end
+
+	describe "secure password" do
 
 		before { @user = create_user set_password_fields: false }
 
